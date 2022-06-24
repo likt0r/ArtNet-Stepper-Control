@@ -1,0 +1,56 @@
+#include <Arduino.h>
+#include <DishAxis.cpp>
+
+uint8_t AXIS1_PUL_PIN = 40;
+uint8_t AXIS1_DIR_PIN = 42;
+uint8_t AXIS2_PIN = 44;
+uint8_t AXIS2_DIR_PIN = 46;
+
+int STEP_RESOLUTION = 1600;
+
+uint8_t OUTPUTS[0] = {};
+
+// Motors 1600 steps resolution
+dishAxis axis01(40, AXIS1_DIR_PIN, STEP_RESOLUTION); //
+// dishAxis axis02(42, AXIS2_DIR_PIN); //
+
+void setup()
+{
+    Serial.begin(9600);
+    // define inputs/ outputs
+    // define motor pins
+    for (int i = 0; i < sizeof(OUTPUTS); i++)
+    {
+        pinMode(OUTPUTS[i], OUTPUT);
+    }
+}
+
+int counter = 0;
+int direction = 1;
+void loop()
+{
+
+    // if(digitalRead(BUTTON_01) == HIGH){        // If button is pressed
+
+    // digitalWrite(RELAY_PIN, HIGH); // turn on motor current
+    // delay(500); // delay to allow switching of the motor current relay
+
+    axis01.move(90 * direction);
+    // digitalWrite(40, LOW);
+    delay(100);
+    Serial.println("Steps");
+    counter = counter + 1;
+    if (counter > 5)
+    {
+
+        counter = 0;
+        direction = direction * -1;
+        Serial.println('Change direction');
+    }
+
+    // doubleSlot.ejectPart();
+
+    // digitalWrite(RELAY_PIN, LOW); // turn off motor current
+    // delay(500); // delay to allow switching of the motor current relay
+    //}
+}
