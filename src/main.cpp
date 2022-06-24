@@ -25,10 +25,11 @@ ArtnetReceiver artnet;
 uint32_t universe0 = 0; // 0 - 15
 uint8_t AXIS1_PUL_PIN = 40;
 uint8_t AXIS1_DIR_PIN = 42;
-uint8_t AXIS2_PIN = 44;
+uint8_t AXIS2_PUL_PIN = 44;
 uint8_t AXIS2_DIR_PIN = 46;
 pt ptArtNet;
 Axis axis1 = Axis(AXIS1_PUL_PIN, AXIS1_DIR_PIN, 1000, 25);
+Axis axis2 = Axis(AXIS2_PUL_PIN, AXIS2_DIR_PIN, 1000, 25);
 int artNetThread(struct pt *pt)
 {
     PT_BEGIN(pt);
@@ -48,6 +49,8 @@ void callback(const uint8_t *data, const uint16_t size)
     // Serial.println(" Recieved package");
     axis1.setTarget(data[0]);
     axis1.setSleepTimeFromDmx(data[1]);
+    axis2.setTarget(data[2]);
+    axis2.setSleepTimeFromDmx(data[3]);
 }
 
 void setup()
@@ -62,10 +65,12 @@ void setup()
     // you can also use pre-defined callbacks
     artnet.subscribe(universe0, callback);
     axis1.setup();
+    axis2.setup();
 }
 
 void loop()
 {
     PT_SCHEDULE(artNetThread(&ptArtNet));
     axis1.loop();
+    axis2.loop();
 }
