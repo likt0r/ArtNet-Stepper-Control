@@ -1,0 +1,3 @@
+[submodule "ArtNet"]
+	path = ArtNet
+	url = https://github.com/hideakitai/ArtNet
